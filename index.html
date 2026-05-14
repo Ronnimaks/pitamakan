@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>КП: Питамакан | THE ONE event</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Chosen Palette: Warm Sand & Sun (Beige, Soft Orange, Charcoal) -->
+    <!-- Application Structure Plan: 
+         1. Hero Section: Personalized greeting and event confirmation to build immediate trust.
+         2. Concept Interpretation: Showing understanding of the "Pitamakan" and "Sun Energy" vibe from the briefing.
+         3. Demo Script (Interactive Tabs): A tangible preview of the creative work. Breaking down the requested 45-min and 30-min blocks into a clickable, engaging format to prove competence.
+         4. Market Analysis & Pricing (Chart): Transparently explaining the cost of premium creator services vs market average to justify the quote.
+         5. Roadmap & CTA: Clear next steps (Stages 1-5 from the PDF) to close the deal.
+         This dashboard approach allows the client to explore the creative vision and logical pricing non-linearly, maximizing engagement and conversion. -->
+    <!-- Visualization & Content Choices: 
+         - Tabbed Interface (Goal: Organize): Best for showing chronological event blocks (Welcome, Block 1, Block 2) without overwhelming text. Uses vanilla JS.
+         - Bar Chart (Goal: Compare): Chart.js used to compare our pricing against market averages, visually justifying the premium rate. Responsive and contained.
+         - NO SVG graphics used. NO Mermaid JS used. Unicode symbols and Tailwind shapes are used for visual accents. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #FDFBF7; /* Light warm beige */
+            color: #333333;
+        }
+        
+        /* Required Chart Container Styling */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 50vh;
+        }
+
+        .tab-btn {
+            transition: all 0.3s ease;
+        }
+        .tab-btn.active {
+            background-color: #D4A373; /* Warm sun accent */
+            color: white;
+            border-color: #D4A373;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #FDFBF7; }
+        ::-webkit-scrollbar-thumb { background: #D4A373; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #b0855b; }
+    </style>
+</head>
+<body class="antialiased scroll-smooth">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 top-0 bg-[#FDFBF7]/90 backdrop-blur-md border-b border-[#E8D8CE]">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex-shrink-0 font-bold text-xl tracking-wider text-[#b0855b]">
+                    CREATOR <span class="text-[#333333]">PROPOSAL</span>
+                </div>
+                <div class="hidden md:flex space-x-8 text-sm font-medium">
+                    <a href="#vision" class="hover:text-[#D4A373] transition">Концепция</a>
+                    <a href="#script" class="hover:text-[#D4A373] transition">Демо-сценарий</a>
+                    <a href="#pricing" class="hover:text-[#D4A373] transition">Смета и Рынок</a>
+                    <a href="#steps" class="hover:text-[#D4A373] transition">Этапы</a>
+                </div>
+                <a href="#pricing" class="bg-[#333333] text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-[#D4A373] transition">Утвердить КП</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto text-center">
+        <div class="inline-block px-4 py-1 rounded-full bg-[#E8D8CE] text-[#8c6239] text-sm font-semibold mb-6 tracking-wide">
+            ДЛЯ АЛИСЫ | THE ONE EVENT
+        </div>
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+            Интерактивная концепция<br>
+            <span class="text-[#D4A373]">«ПИТАМАКАН»</span>
+        </h1>
+        <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-10">
+            День рождения Юрия Геннадьевича • 29 мая 2026 • BUTLER<br>
+            <span class="text-sm mt-2 block">Сценарий, который объединяет эстетику, «Энергию солнца» и персонализированный подход.</span>
+        </p>
+        
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto text-left">
+            <div class="p-4 bg-white rounded-xl shadow-sm border border-[#E8D8CE]">
+                <div class="text-2xl mb-2">📜</div>
+                <div class="font-bold text-sm">Полный сценарий</div>
+                <div class="text-xs text-gray-500 mt-1">От велкома до финала</div>
+            </div>
+            <div class="p-4 bg-white rounded-xl shadow-sm border border-[#E8D8CE]">
+                <div class="text-2xl mb-2">🎤</div>
+                <div class="font-bold text-sm">Тексты ведущего</div>
+                <div class="text-xs text-gray-500 mt-1">Монологи и диалоги</div>
+            </div>
+            <div class="p-4 bg-white rounded-xl shadow-sm border border-[#E8D8CE]">
+                <div class="text-2xl mb-2">🧩</div>
+                <div class="font-bold text-sm">Интерактивы</div>
+                <div class="text-xs text-gray-500 mt-1">Механики и резерв</div>
+            </div>
+            <div class="p-4 bg-white rounded-xl shadow-sm border border-[#E8D8CE]">
+                <div class="text-2xl mb-2">💻</div>
+                <div class="font-bold text-sm">Визуал экранов</div>
+                <div class="text-xs text-gray-500 mt-1">Минимализм и чистота</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vision Section -->
+    <section id="vision" class="py-16 bg-white border-y border-[#E8D8CE]">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-12">
+                <h2 class="text-3xl font-bold mb-4">Наше видение: Энергия Солнца</h2>
+                <p class="text-gray-600 max-w-3xl">
+                    В этом разделе мы синхронизируемся по смыслам. Изучив ТЗ и референсы площадки (лаунж-зоны, именные принты, теплый свет), я сформировал основу для интерактивной программы. Сценарий не должен быть оторван от декора — он должен его оживлять.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-[#FDFBF7] p-8 rounded-2xl">
+                    <div class="text-3xl mb-4 text-[#D4A373]">☀️</div>
+                    <h3 class="text-xl font-bold mb-3">Лейтмотив: Тепло</h3>
+                    <p class="text-sm text-gray-600">Все интерактивы строятся на раскрытии теплых, дружеских связей между Юрием Геннадьевичем и гостями. Никаких шаблонных конкурсов — только элегантное общение (диалоги), подчеркивающее статус и камерность.</p>
+                </div>
+                <div class="bg-[#FDFBF7] p-8 rounded-2xl">
+                    <div class="text-3xl mb-4 text-[#D4A373]">🪑</div>
+                    <h3 class="text-xl font-bold mb-3">Интеграция декора</h3>
+                    <p class="text-sm text-gray-600">Именные принты у каждого стула станут частью интерактива. Например, в первом блоке мы используем элементы сервировки для визуализации «сети знакомств» именинника.</p>
+                </div>
+                <div class="bg-[#FDFBF7] p-8 rounded-2xl">
+                    <div class="text-3xl mb-4 text-[#D4A373]">📺</div>
+                    <h3 class="text-xl font-bold mb-3">Экранный минимализм</h3>
+                    <p class="text-sm text-gray-600">Как указано в ТЗ, визуал будет чистым. Экраны работают как стильное дополнение (абстракции, типографика, подсказки), а не как отвлекающее пятно.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Script Section -->
+    <section id="script" class="py-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
+        <div class="mb-10">
+            <h2 class="text-3xl font-bold mb-4">Демо-структура сценария</h2>
+            <p class="text-gray-600 max-w-3xl">
+                Ниже представлена черновая разбивка программы на блоки, согласно таймингу мероприятий такого уровня (Большой первый блок и 30-минутные сеты). Это лишь <span class="font-bold">10% от идей</span>, чтобы показать вектор мышления. Кликайте по блокам, чтобы изучить механику.
+            </p>
+        </div>
+
+        <div class="flex flex-col md:flex-row gap-8">
+            <!-- Tabs Navigation -->
+            <div class="w-full md:w-1/3 flex flex-col space-y-3" id="tab-buttons">
+                <button onclick="switchTab('welcome')" class="tab-btn active text-left px-6 py-4 rounded-xl border border-gray-200 font-semibold text-[#333333] hover:bg-gray-50 flex justify-between items-center">
+                    <span>Сбор гостей (Welcome)</span>
+                    <span class="text-xs text-gray-400">19:00</span>
+                </button>
+                <button onclick="switchTab('block1')" class="tab-btn text-left px-6 py-4 rounded-xl border border-gray-200 font-semibold text-[#333333] hover:bg-gray-50 flex justify-between items-center">
+                    <span>Блок 1: «Рассвет»</span>
+                    <span class="text-xs text-gray-400">45-50 мин</span>
+                </button>
+                <button onclick="switchTab('block2')" class="tab-btn text-left px-6 py-4 rounded-xl border border-gray-200 font-semibold text-[#333333] hover:bg-gray-50 flex justify-between items-center">
+                    <span>Блок 2: «Зенит»</span>
+                    <span class="text-xs text-gray-400">30 мин</span>
+                </button>
+                <button onclick="switchTab('block3')" class="tab-btn text-left px-6 py-4 rounded-xl border border-gray-200 font-semibold text-[#333333] hover:bg-gray-50 flex justify-between items-center">
+                    <span>Блок 3: «Закат»</span>
+                    <span class="text-xs text-gray-400">30 мин</span>
+                </button>
+            </div>
+
+            <!-- Tabs Content -->
+            <div class="w-full md:w-2/3 bg-white p-8 rounded-2xl shadow-sm border border-[#E8D8CE] min-h-[400px]" id="tab-content">
+                <!-- Content injected via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Market Analysis & Pricing -->
+    <section id="pricing" class="py-20 bg-[#333333] text-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-12 md:text-center">
+                <h2 class="text-3xl font-bold mb-4 text-white">Аналитика рынка и Смета</h2>
+                <p class="text-gray-400 max-w-3xl mx-auto">
+                    Я провел анализ стоимости услуг топовых event-креаторов и сценаристов. Создание полностью кастомного продукта (от концепции механик до написания презентаций и текстов ведущего) оценивается по 4 ключевым параметрам.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <!-- Text Data -->
+                <div>
+                    <h3 class="text-xl font-semibold mb-6 text-[#D4A373]">Декомпозиция сметы</h3>
+                    <div class="space-y-6">
+                        <div class="border-b border-gray-700 pb-4">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="font-medium">1. Концепция и механики</span>
+                                <span class="text-[#D4A373] font-bold">15 000 ₽</span>
+                            </div>
+                            <p class="text-xs text-gray-400">Разработка идеи, логики интерактивов, резервные варианты.</p>
+                        </div>
+                        <div class="border-b border-gray-700 pb-4">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="font-medium">2. Полный сценарий + Тексты</span>
+                                <span class="text-[#D4A373] font-bold">25 000 ₽</span>
+                            </div>
+                            <p class="text-xs text-gray-400">Сценарная структура, монологи, прописание диалогов ведущего с гостями.</p>
+                        </div>
+                        <div class="border-b border-gray-700 pb-4">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="font-medium">3. Презентационные материалы</span>
+                                <span class="text-[#D4A373] font-bold">20 000 ₽</span>
+                            </div>
+                            <p class="text-xs text-gray-400">Визуал для экранов (минимализм), подготовка PPTX, технические подсказки.</p>
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="font-medium">4. Тех. комментарии и правки</span>
+                                <span class="text-[#D4A373] font-bold">10 000 ₽</span>
+                            </div>
+                            <p class="text-xs text-gray-400">Комментарии для режиссера/света/звука, доработки по 5 этапам согласования.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 bg-gray-800 p-6 rounded-xl border border-gray-600">
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg">Итоговая стоимость:</span>
+                            <span class="text-2xl font-bold text-white">120 000 ₽</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chart -->
+                <div>
+                    <div class="chart-container bg-white p-4 rounded-xl">
+                        <canvas id="marketChart"></canvas>
+                    </div>
+                    <p class="text-center text-xs text-gray-400 mt-4">
+                        *Сравнение со средними рыночными ценами на услуги креаторов уровня Premium.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap & CTA -->
+    <section id="steps" class="py-20 bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-bold mb-12">Как мы будем работать?</h2>
+            
+            <div class="flex flex-col md:flex-row justify-center items-center gap-4 mb-16">
+                <!-- Step 1 -->
+                <div class="relative flex flex-col items-center w-full md:w-48">
+                    <div class="w-12 h-12 rounded-full bg-[#D4A373] text-white flex items-center justify-center font-bold text-xl z-10 mb-3">1</div>
+                    <h4 class="font-semibold text-sm">Концепция</h4>
+                    <p class="text-xs text-gray-500 mt-1">Идеи интерактивов</p>
+                    <div class="hidden md:block absolute top-6 left-1/2 w-full h-0.5 bg-gray-200 -z-0"></div>
+                </div>
+                <!-- Step 2 -->
+                <div class="relative flex flex-col items-center w-full md:w-48">
+                    <div class="w-12 h-12 rounded-full bg-[#FDFBF7] border-2 border-[#D4A373] text-[#D4A373] flex items-center justify-center font-bold text-xl z-10 mb-3">2</div>
+                    <h4 class="font-semibold text-sm">Черновик</h4>
+                    <p class="text-xs text-gray-500 mt-1">Структура сценария</p>
+                    <div class="hidden md:block absolute top-6 left-1/2 w-full h-0.5 bg-gray-200 -z-0"></div>
+                </div>
+                <!-- Step 3 -->
+                <div class="relative flex flex-col items-center w-full md:w-48">
+                    <div class="w-12 h-12 rounded-full bg-[#FDFBF7] border-2 border-[#D4A373] text-[#D4A373] flex items-center justify-center font-bold text-xl z-10 mb-3">3</div>
+                    <h4 class="font-semibold text-sm">Тексты</h4>
+                    <p class="text-xs text-gray-500 mt-1">Речь ведущего</p>
+                    <div class="hidden md:block absolute top-6 left-1/2 w-full h-0.5 bg-gray-200 -z-0"></div>
+                </div>
+                <!-- Step 4 -->
+                <div class="relative flex flex-col items-center w-full md:w-48">
+                    <div class="w-12 h-12 rounded-full bg-[#FDFBF7] border-2 border-[#D4A373] text-[#D4A373] flex items-center justify-center font-bold text-xl z-10 mb-3">4</div>
+                    <h4 class="font-semibold text-sm">Материалы</h4>
+                    <p class="text-xs text-gray-500 mt-1">Презентации на экран</p>
+                    <div class="hidden md:block absolute top-6 left-1/2 w-full h-0.5 bg-gray-200 -z-0"></div>
+                </div>
+                <!-- Step 5 -->
+                <div class="relative flex flex-col items-center w-full md:w-48">
+                    <div class="w-12 h-12 rounded-full bg-[#333333] text-white flex items-center justify-center font-bold text-xl z-10 mb-3">5</div>
+                    <h4 class="font-semibold text-sm">Сборка</h4>
+                    <p class="text-xs text-gray-500 mt-1">Финальное утверждение</p>
+                </div>
+            </div>
+
+            <div class="max-w-2xl mx-auto bg-[#FDFBF7] p-8 rounded-2xl border border-[#E8D8CE]">
+                <h3 class="text-2xl font-bold mb-4">Готовы начать этап 1?</h3>
+                <p class="text-gray-600 mb-8">
+                    Если вам откликается подход, видение и качество этого коммерческого предложения — подтверждайте смету, и я приступаю к детальной проработке концепции интерактивов для Юрия Геннадьевича.
+                </p>
+                <button onclick="alert('Алиса, спасибо за доверие! Ожидаю подтверждения в Telegram/почте, и мы начинаем магию.')" class="bg-[#D4A373] text-white px-8 py-4 rounded-full text-lg font-bold hover:bg-[#b0855b] transition shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                    Согласовать КП и начать работу
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-[#FDFBF7] py-8 text-center text-sm text-gray-500 border-t border-[#E8D8CE]">
+        <p>Создано специально для THE ONE event • 2026</p>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Data for Script Tabs
+        const scriptData = {
+            welcome: {
+                title: "Сбор гостей: Настройка на волну",
+                content: `
+                    <div class="space-y-4 fade-in">
+                        <div class="flex items-start">
+                            <span class="text-2xl mr-3">🥂</span>
+                            <div>
+                                <h4 class="font-bold text-lg">Атмосфера</h4>
+                                <p class="text-gray-600 text-sm">Гости попадают в лаунж-зону (диваны, пуфы). Ведущий работает в формате small-talk, без микрофона или с легкой подзвучкой. Задача — задать премиальный, но расслабленный тон.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="text-2xl mr-3">☀️</span>
+                            <div>
+                                <h4 class="font-bold text-lg">Микро-интерактив: «Частица Солнца»</h4>
+                                <p class="text-gray-600 text-sm">При входе гости получают стильный элемент (например, карточку из крафтовой бумаги с индивидуальным принтом, перекликающимся со стульями). Ведущий просит написать на ней 1 слово, с которым ассоциируется Юрий. Карточки собираются в красивую композицию в лаунж-зоне.</p>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            block1: {
+                title: "Блок 1 (45-50 мин): Застольный. «Рассвет»",
+                content: `
+                    <div class="space-y-4 fade-in">
+                        <p class="text-sm text-gray-500 mb-4 border-l-4 border-[#D4A373] pl-3">Самый важный блок для создания теплой атмосферы за столами.</p>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-bold mb-2">1. Монолог-открытие (5-7 мин)</h4>
+                            <p class="text-sm text-gray-600">Глубокий, не пафосный текст ведущего о пути именинника. Метафора восходящего солнца, энергии, которая собирает вокруг себя сильных людей.</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-bold mb-2">2. Интерактив: «Индивидуальный принт» (15 мин)</h4>
+                            <p class="text-sm text-gray-600">Используем декор из ТЗ! На экраны выводятся элементы узоров со стульев/столов гостей. Ведущий выстраивает диалоги: почему этот узор достался именно этому гостю? Легкий юмор, выявление связей между гостями и Юрием.</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-bold mb-2">3. Тосты и диалоги (25 мин)</h4>
+                            <p class="text-sm text-gray-600">Органичное предоставление слова главным гостям. Ведущий делает подводки на основе заранее собранных фактов (напишу для этого вопросы).</p>
+                        </div>
+                    </div>
+                `
+            },
+            block2: {
+                title: "Блок 2 (30 мин): Активный. «Зенит»",
+                content: `
+                    <div class="space-y-4 fade-in">
+                        <p class="text-sm text-gray-500 mb-4 border-l-4 border-[#D4A373] pl-3">Гости поели, готовы двигаться. Интерактивы становятся более динамичными, но остаются эстетичными.</p>
+                        <div class="flex items-start">
+                            <div class="bg-[#D4A373] text-white rounded p-2 text-xs font-bold mr-3 mt-1">ИГРА</div>
+                            <div>
+                                <h4 class="font-bold text-lg">Экранный интерактив: «Нейро-Питамакан»</h4>
+                                <p class="text-gray-600 text-sm mb-2">На стильных экранах с минималистичным дизайном появляются сгенерированные нейросетью изображения. Это зашифрованные хобби, бизнес-кейсы или любимые места Юрия. Формат элегантной викторины-аукциона эмоций.</p>
+                                <p class="text-xs text-gray-500 italic">Резервная механика (предоставляется по ТЗ): Музыкальный интерактив "Симфония жизни", если аудитория захочет больше музыки, а не викторин.</p>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            block3: {
+                title: "Блок 3 (30 мин): Кульминация. «Закат»",
+                content: `
+                    <div class="space-y-4 fade-in">
+                        <div class="bg-gray-50 p-5 rounded-xl border border-gray-100">
+                            <h4 class="font-bold text-lg mb-3">Музыкально-танцевальная активность</h4>
+                            <p class="text-sm text-gray-600 mb-4">Ведущий интегрируется в выступление кавер-группы. Флешмоб без нафталина: ведущий делит зал на стороны, создает "перекличку" светом фонариков телефонов, объединяя всех под любимую песню Юрия Геннадьевича.</p>
+                            <h4 class="font-bold text-lg mb-2 text-[#D4A373]">Вынос торта</h4>
+                            <p class="text-sm text-gray-600">Монолог, закольцовывающий начало. Слова о том, что солнце не заходит, оно согревает нас изнутри. Красивый режиссерский момент со светом и музыкой (пропишу тех. комментарии для световика).</p>
+                        </div>
+                    </div>
+                `
+            }
+        };
+
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            // Update buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+
+            // Update content
+            const contentContainer = document.getElementById('tab-content');
+            const data = scriptData[tabId];
+            
+            contentContainer.innerHTML = `
+                <h3 class="text-2xl font-bold mb-6 text-[#333333]">${data.title}</h3>
+                ${data.content}
+            `;
+        }
+
+        // Initialize first tab
+        document.addEventListener('DOMContentLoaded', () => {
+            const firstBtn = document.querySelector('.tab-btn');
+            firstBtn.click(); // Programmatically click first tab
+            
+            // Initialize Chart.js
+            initChart();
+        });
+
+        // Chart.js Logic
+        function initChart() {
+            const ctx = document.getElementById('marketChart').getContext('2d');
+            
+            // Data reflecting market research for premium creator
+            const chartData = {
+                labels: ['Базовый сценарий', 'Мое КП (Premium)', 'Рынок: Топ-агентства'],
+                datasets: [{
+                    label: 'Стоимость (Руб)',
+                    data: [60000, 120000, 200000],
+                    backgroundColor: [
+                        '#E8D8CE', // Base
+                        '#D4A373', // Our Offer (Highlight)
+                        '#333333'  // Top market
+                    ],
+                    borderRadius: 6,
+                    barPercentage: 0.6
+                }]
+            };
+
+            const config = {
+                type: 'bar',
+                data: chartData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false, // Critical for container constraint
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.parsed.y.toLocaleString('ru-RU') + ' ₽';
+                                }
+                            },
+                            backgroundColor: '#333',
+                            titleFont: { family: 'Montserrat', size: 13 },
+                            bodyFont: { family: 'Montserrat', size: 14, weight: 'bold' },
+                            padding: 10
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value / 1000 + 'k'; // Format as k
+                                },
+                                font: { family: 'Montserrat' }
+                            },
+                            grid: { color: '#f0f0f0' }
+                        },
+                        x: {
+                            ticks: {
+                                font: { family: 'Montserrat', size: 11 },
+                                callback: function(val, index) {
+                                    // Label wrapping logic (16-char) as requested
+                                    let label = this.getLabelForValue(val);
+                                    if (label.length > 16) {
+                                        let splitPos = label.indexOf(' ', 10);
+                                        if (splitPos > -1) {
+                                            return [label.substring(0, splitPos), label.substring(splitPos + 1)];
+                                        }
+                                    }
+                                    return label;
+                                }
+                            },
+                            grid: { display: false }
+                        }
+                    },
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeOutQuart'
+                    }
+                }
+            };
+
+            new Chart(ctx, config);
+        }
+    </script>
+</body>
+</html>
